@@ -2,6 +2,9 @@ import axios from 'axios';
 import store from '../store';
 import { LOGOUT } from '../actions/types';
 
+const API_URL = process.env.REACT_APP_API_URL || 'https://your-vercel-domain.vercel.app/api';
+
+
 // Create an instance of axios
 const api = axios.create({
   baseURL: '/api',
