@@ -1,24 +1,33 @@
-// client/src/utils/api.js
 import axios from 'axios';
+import store from '../store';
+import { LOGOUT } from '../actions/types';
 
+const API_URL =
+  process.env.REACT_APP_API_URL ||
+  'https://backend-production-503c.up.railway.app';
+
+// Create an instance of axios
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json'
   }
 });
+/*
+  NOTE: intercept any error responses from the api
+ and check if the token is no longer valid.
+ ie. Token has expired or user is no longer
+ authenticated.
+ logout the user if the token has expired
+*/
 
-// Add a request interceptor to add the auth token to requests
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response.status === 401) {
+      store.dispatch({ type: LOGOUT });
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+    return Promise.reject(err);
   }
 );
 
