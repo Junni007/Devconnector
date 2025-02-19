@@ -1,0 +1,10 @@
+name = "devconnector"
+type = "webpack"
+account_id = "your-account-id"
+workers_dev = true
+
+[
+site
+]
+bucket = "./build"
+entry-point = "workers-site"
